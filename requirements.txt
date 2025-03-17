@@ -1,16 +1,33 @@
+# Streamlit & UI Components
 streamlit
-streamlit-option-menu
-streamlit-extras
-streamlit-aggrid
-streamlit-shadcn-ui
-streamlit-lottie
-google-generativeai
+streamlit_option_menu
+streamlit_tailwind
+streamlit-aggrid    
+streamlit_lottie
+streamlit_extras
+streamlit_shadcn_ui
+awesome_table
+streamlit-awesome-table
+
+# Database & Cloud Storage
 psycopg2
-pandas
-altair
-pdf2image
-Pillow
-fpdf
-docx
+supabase
 python-dotenv
 
+# Data Processing 
+pandas
+numpy
+altair
+Pillow
+pdf2image
+fpdf
+python-docx
+xlsxwriter
+
+# Google Gemini API
+google-generativeai
+
+# Logging & Other Utilities
+io
+datetime
+logging

@@ -8,8 +8,8 @@ streamlit_extras
 streamlit_shadcn_ui
 
 # Database & Cloud Storage
-psycopg2-binary  # ✅ Fixed
-supabase         # ✅ Fixed
+psycopg2-binary  
+supabase         
 python-dotenv
 
 # Data Processing 

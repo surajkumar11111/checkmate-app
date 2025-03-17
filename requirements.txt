@@ -1,15 +1,15 @@
 # Streamlit & UI Components
 streamlit
-streamlit-option-menu
-streamlit-tailwind
+streamlit_option_menu
+streamlit_tailwind
 streamlit-aggrid    
-streamlit-lottie
-streamlit-extras
-streamlit-shadcn-ui
+streamlit_lottie
+streamlit_extras
+streamlit_shadcn_ui
 
 # Database & Cloud Storage
-psycopg2-binary  
-supabase-py      
+psycopg2-binary  # ✅ Fixed
+supabase         # ✅ Fixed
 python-dotenv
 
 # Data Processing 

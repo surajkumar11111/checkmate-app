@@ -9,8 +9,11 @@ import json
 
 init_db_connection()
 
-# fetch cheque data & store in session state
 if "cheque_data" not in st.session_state:
+    st.session_state.cheque_data = pd.DataFrame()
+
+# fetch cheque data & store in session state
+if st.session_state.cheque_data.empty:
     records = fetch_cheque_details()
     if records:
         expected_columns = ["cheque_date", "account_number", "bank_name", "cheque_number", "payee_name", "amount", "uploaded_at"]

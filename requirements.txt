@@ -1,16 +1,15 @@
 # Streamlit & UI Components
 streamlit
-streamlit_option_menu
-streamlit_tailwind
+streamlit-option-menu
+streamlit-tailwind
 streamlit-aggrid    
-streamlit_lottie
-streamlit_extras
-streamlit_shadcn_ui
-streamlit-awesome-table
+streamlit-lottie
+streamlit-extras
+streamlit-shadcn-ui
 
 # Database & Cloud Storage
-psycopg2
-supabase
+psycopg2-binary  
+supabase-py      
 python-dotenv
 
 # Data Processing 
@@ -25,8 +24,3 @@ xlsxwriter
 
 # Google Gemini API
 google-generativeai
-
-# Logging & Other Utilities
-io
-datetime
-logging

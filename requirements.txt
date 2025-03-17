@@ -6,7 +6,6 @@ streamlit-aggrid
 streamlit_lottie
 streamlit_extras
 streamlit_shadcn_ui
-awesome_table
 streamlit-awesome-table
 
 # Database & Cloud Storage

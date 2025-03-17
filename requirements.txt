@@ -24,3 +24,6 @@ xlsxwriter
 
 # Google Gemini API
 google-generativeai
+
+# Plotly for Advanced Tables
+plotly

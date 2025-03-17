@@ -6,7 +6,8 @@ from datetime import datetime
 import streamlit_shadcn_ui as ui
 import altair as alt
 from local_components import card_container
-from awesome_table import AwesomeTable  # type: ignore
+import plotly.graph_objects as go 
+from local_components import card_container
 
 # initialize Supabase DB connection once
 init_db_connection()
@@ -77,7 +78,13 @@ else:
         st.subheader("Cheque Records")
         overview_data = df[["uploaded_at", "cheque_number", "payee_name", "account_number", "bank_name", "amount"]]
         overview_data.columns = ["Upload Date", "Cheque No", "Payee Name", "Account Number", "Bank Name", "Amount"]
-        AwesomeTable(overview_data)
+
+        fig = go.Figure(data=[go.Table(
+            header=dict(values=list(overview_data.columns), fill_color="lightblue", align="left"),
+            cells=dict(values=[overview_data[col] for col in overview_data.columns], fill_color="white", align="left")
+        )])
+
+        st.plotly_chart(fig, use_container_width=True)
 
     elif selected_tab == 'Analytics':        
         st.subheader("Cheque Amount Distribution by Bank")
@@ -147,4 +154,10 @@ else:
         st.subheader("Cheque Records Summary")
         summary_data = df.groupby("bank_name").agg({"cheque_number": "count", "amount": "sum"}).reset_index()
         summary_data.columns = ["Bank Name", "Total Cheques", "Total Amount"]
-        AwesomeTable(summary_data)
+
+        fig_summary = go.Figure(data=[go.Table(
+            header=dict(values=list(summary_data.columns), fill_color="lightblue", align="left"),
+            cells=dict(values=[summary_data[col] for col in summary_data.columns], fill_color="white", align="left")
+        )])
+
+        st.plotly_chart(fig_summary, use_container_width=True) 

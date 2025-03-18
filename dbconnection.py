@@ -1,81 +1,70 @@
-import psycopg2
-import streamlit as st
-import os
 import logging
+import os
 from dotenv import load_dotenv
+from supabase import create_client, Client
 
-
+# load environment variables
 load_dotenv()
 
 # set up logging
 logging.basicConfig(level=logging.INFO)
 
+# supabase credentials
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+# initialize Supabase client
+supabase: Client = None
+
 def init_db_connection():
-    """Initialize a single database connection using Streamlit session state."""
-    try:
-        if "db_connection" not in st.session_state or st.session_state.db_connection is None:
-            st.session_state.db_connection = psycopg2.connect(
-                dbname=os.getenv("DB_NAME"),
-                user=os.getenv("DB_USER"),
-                password=os.getenv("DB_PASSWORD"),
-                host=os.getenv("DB_HOST"),
-                port=os.getenv("DB_PORT")
-            )
-            logging.info("Connected to Supabase PostgreSQL successfully.")
-    except Exception as err:
-        logging.error(f"Database connection failed: {err}")
-        st.session_state.db_connection = None  # ensure no invalid conn is stored
+    """Initialize Supabase connection."""
+    global supabase
+    if supabase is None:
+        if not SUPABASE_URL or not SUPABASE_KEY:
+            raise ValueError("Missing Supabase URL or API Key in environment variables.")
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        logging.info("Connected to Supabase successfully.")
 
-def get_db_connection():
-    """Retrieve the existing database connection from session state."""
-    if "db_connection" not in st.session_state or st.session_state.db_connection is None:
-        init_db_connection()
-    return st.session_state.db_connection
-
+# insert cheque details into Supabase
 def insert_cheque_details(details):
-    """Insert cheque details into Supabase PostgreSQL."""
-    insert_query = """
-        INSERT INTO cheque_details_tbl (
-            cheque_date, account_number, bank_name, cheque_number, 
-            payee_name, amount, status
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s)
-    """
-
+    """Insert cheque details into Supabase."""
     try:
-        connection = get_db_connection()
-        if connection is None:
-            raise ConnectionError("Database connection is unavailable.")
+        init_db_connection()
 
-        with connection.cursor() as cursor:
-            cursor.execute(insert_query, (
-                details.get("cheque_date", ""),
-                details.get("account_number", ""),
-                details.get("bank_name", ""),
-                details.get("cheque_number", ""),
-                details.get("payee_name", ""),
-                details.get("amount", ""),
-                details.get("status", "Processed")
-            ))
-            connection.commit()
+        if not details or not isinstance(details, dict):
+            logging.error("Invalid cheque details. Skipping insert.")
+            return
+
+        data = {
+            "cheque_date": details.get("cheque_date", ""),
+            "account_number": details.get("account_number", ""),
+            "bank_name": details.get("bank_name", ""),
+            "cheque_number": details.get("cheque_number", ""),
+            "payee_name": details.get("payee_name", ""),
+            "amount": details.get("amount", ""),
+            "status": details.get("status", "Processed"),
+        }
+        response = supabase.table("cheque_details_tbl").insert(data).execute()
+
+        if response.data:
             logging.info("Cheque details inserted successfully.")
+        else:
+            logging.error(f"Failed to insert cheque details: {response.error}")
+
     except Exception as err:
         logging.error(f"Error inserting cheque details: {err}")
         raise
 
+# fetch cheque details from Supabase
 def fetch_cheque_details():
     """Fetch all cheque details from Supabase."""
     try:
-        connection = get_db_connection()
-        if connection is None:
-            raise ConnectionError("Database connection is unavailable.")
-
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT cheque_date, account_number, bank_name, cheque_number, 
-                       payee_name, amount, uploaded_at, status
-                FROM cheque_details_tbl
-            """)
-            return cursor.fetchall()
+        init_db_connection()
+        response = supabase.table("cheque_details_tbl").select("*").execute()
+        
+        if response.data:
+            return response.data
+        return []
     except Exception as err:
         logging.error(f"Error fetching cheque details: {err}")
         return []

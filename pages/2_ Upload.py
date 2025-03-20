@@ -64,7 +64,7 @@ def check_poppler_path():
 
 POPPLER_PATH = check_poppler_path()
 
-if os.name == "nt":  # Windows system
+if os.name == "nt":  # windows system
     poppler_path = r"C:\poppler-24.08.0\Library\bin"
 else:  
     poppler_path = "/usr/bin"

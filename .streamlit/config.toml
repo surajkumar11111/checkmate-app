@@ -1,5 +1,5 @@
 [theme]
-primaryColor = "#0cc789"  # Button & accent color
-backgroundColor = "#f5f7fa"  # Light grey background
-secondaryBackgroundColor = "#e3e7ed"  # Sidebar & container background
+primaryColor = "#0cc789"  # button & accent color
+backgroundColor = "#f5f7fa"  # light grey background
+secondaryBackgroundColor = "#e3e7ed"  # sidebar & container background
 textColor = "#212121"  # Dark text color

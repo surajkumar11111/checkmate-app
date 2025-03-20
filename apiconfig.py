@@ -16,6 +16,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-2.0-flash")
 
+
 PROMPT = PROMPT = """Extract details from the scanned cheque and return the response in JSON format:
     {
         "payee_name": "Full name of the payee",
@@ -27,6 +28,7 @@ PROMPT = PROMPT = """Extract details from the scanned cheque and return the resp
     }
         Ensure correct JSON formatting, return empty strings for missing fields, and strictly use 'YYYY-MM-DD' for cheque_date.        
     """
+
 def extract_cheque_details(image_bytes):
     """Extract cheque details using Gemini API and return a structured JSON response."""
     try:

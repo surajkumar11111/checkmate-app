@@ -1,12 +1,12 @@
-/* Import "Plus Jakarta Sans" from Google Fonts */
+/* import "Plus Jakarta Sans" from Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&display=swap');
 
-/* Apply globally */
+/* apply globally */
 html, body, [class*="st-"] {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-/* Customize headers */
+/* customize headers */
 h1, h2, h3 {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 600;
@@ -19,15 +19,13 @@ p, label, div {
     color: black;
 }
 
-/* Button text */
+/* button text */
 .stButton > button {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 600;
 }
 
-
-
-/* Change the sidebar color*/
+/* change the sidebar color*/
 [data-testid=stSidebar] {
     background: #F3F4F6;
   }
@@ -37,7 +35,7 @@ p, label, div {
   }
   
   
-  /* Target the text color when hovering over the span element */
+  /* target the text color when hovering over the span element */
   .st-emotion-cache-1q1fytl.eczjsme5:hover,
   .st-emotion-cache-1aw8i8e.eczjsme5:hover,
   .st-emotion-cache-1aw8i8e.eczjsme5:hover {
@@ -60,7 +58,7 @@ p, label, div {
     color: black;
   }
   
-  /* Style the contact form */
+  /* style the contact form */
   input[type=message], input[type=email], input[type=text], textarea {
       width: 100%; 
       padding: 12px; 
@@ -89,5 +87,4 @@ p, label, div {
                 linear-gradient(0deg, #10B981, #10B981);
     border: 1px solid #10B981
   }
-  
   

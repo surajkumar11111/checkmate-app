@@ -8,22 +8,19 @@ import altair as alt
 import plotly.graph_objects as go 
 
 
-# initialize Supabase DB connection once
+# initialize Supabase DB 
 init_db_connection()
 
-# cheque_data is initialized before use
-if "cheque_data" not in st.session_state:
-    records = fetch_cheque_details()
-    if records:
-        expected_columns = ["cheque_date", "account_number", "bank_name", "cheque_number", "payee_name", "amount", "uploaded_at"]
-        if len(records[0]) == 8:
-            expected_columns.append("status")
-        st.session_state.cheque_data = pd.DataFrame(records, columns=expected_columns)
-    else:
-        st.session_state.cheque_data = pd.DataFrame()  # initialize an empty DataFrame to prevent errors
 
-# load cheque data from session state
-df = st.session_state.cheque_data
+records = fetch_cheque_details()
+if records:
+    expected_columns = ["cheque_date", "account_number", "bank_name", "cheque_number", "payee_name", "amount", "uploaded_at"]
+    if len(records[0]) == 8:
+        expected_columns.append("status")
+    df = pd.DataFrame(records, columns=expected_columns)
+else:
+    df = pd.DataFrame()  
+
 
 if df.empty:
     st.warning("No cheque data available.")
@@ -56,9 +53,8 @@ else:
 
         with chart_cols[0]:  
             st.subheader("Cheques Processed Over Time")
-            df["upload_date"] = pd.to_datetime(df["uploaded_at"], errors="coerce").dt.date  # Convert to date first
+            df["upload_date"] = pd.to_datetime(df["uploaded_at"], errors="coerce").dt.date  
 
-            # Convert back to datetime for Altair (needed for time-series)
             df["upload_date"] = pd.to_datetime(df["upload_date"])
 
             upload_counts = df.groupby("upload_date").size().reset_index(name="count")
@@ -89,14 +85,14 @@ else:
             header=dict(values=list(overview_data.columns), fill_color="#0cc789", font=dict(color="#000000", size=14), align="left"),
             cells=dict(values=[overview_data[col] for col in overview_data.columns], fill_color="white", align="left", font=dict(color="black", size=13))
         )])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, height=900)
                 
 
     elif selected_tab == 'Analytics':        
         st.subheader("Cheque Amount Distribution by Bank")
 
         df["uploaded_at"] = pd.to_datetime(df["uploaded_at"], errors="coerce")
-        df["upload_date"] = df["uploaded_at"].dt.date  # extract only the date
+        df["upload_date"] = df["uploaded_at"].dt.date 
 
         pie_chart = alt.Chart(df).mark_arc().encode(
             theta=alt.Theta("amount:Q", title="Total Amount"),
@@ -169,7 +165,6 @@ else:
 
     elif selected_tab == 'Tables':
         st.subheader("Cheque Records Table")
-        # define the Supabase Table Fields (Ensure consistency with the database)
         supabase_columns = ["cheque_date", "account_number", "bank_name", "cheque_number", 
                         "payee_name", "amount", "uploaded_at", "status"]
 
@@ -193,4 +188,4 @@ else:
             cells=dict(values=[summary_data[col] for col in summary_data.columns], fill_color="white", align="left")
         )])
 
-        st.plotly_chart(fig_summary, use_container_width=True) 
+        st.plotly_chart(fig_summary, use_container_width=True, height=800) 

@@ -40,8 +40,6 @@ info = {
    "Email": "check.mate.contact@gmail.com" 
 }
 
-
-
 FEATURES = [
     {
         "title": "Fast Cheque Processing",
@@ -80,4 +78,3 @@ FEATURES = [
         "icon": "📋"
     }
 ]
-

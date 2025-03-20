@@ -68,3 +68,4 @@ def fetch_cheque_details():
     except Exception as err:
         logging.error(f"Error fetching cheque details: {err}")
         return []
+    

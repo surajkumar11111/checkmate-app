@@ -29,7 +29,7 @@ if df.empty:
     st.warning("No cheque data available.")
 else:
     #df["cheque_date"] = pd.to_datetime(df["cheque_date"], errors='coerce', dayfirst=True)
-    df["cheque_date"] = pd.to_datetime(df["cheque_date"], format="%Y-%m-%d", errors="coerce")
+    df["cheque_date"] = pd.to_datetime(df["cheque_date"], errors="coerce").dt.strftime("%Y-%m-%d")
     df["uploaded_at"] = pd.to_datetime(df["uploaded_at"], errors='coerce')
     df["upload_date"] = df["uploaded_at"].dt.strftime("%Y-%m-%d")  
 

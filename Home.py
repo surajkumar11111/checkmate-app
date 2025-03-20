@@ -4,7 +4,8 @@ from utils.constants import *
 from streamlit_tailwind import st_tw
 from streamlit_lottie import st_lottie # type: ignore
 import json
-from PIL import Image
+import streamlit.components.v1 as components
+from streamlit_javascript import st_javascript
 
 st.set_page_config(page_title='Checkmate', layout="wide", initial_sidebar_state="auto", page_icon='')
 
@@ -13,6 +14,17 @@ def local_css(file_name):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("styles/styles_main.css")
+
+# get screen width dynamically using JavaScript
+screen_width = st_javascript("window.innerWidth")
+
+# store width in session state (default: 1200px for first load)
+if screen_width:
+    st.session_state["viewport_width"] = int(screen_width)
+elif "viewport_width" not in st.session_state:
+    st.session_state["viewport_width"] = 1200  # default 
+
+hide_animations = st.session_state["viewport_width"] <= 480
 
 with st.sidebar:
     st.title("How CheckMate Works")
@@ -54,7 +66,7 @@ with st.container():
             btn2 = st.button("Dashboard")
             if btn2:
                 switch_page("Dashboard")
-    import streamlit.components.v1 as components
+
 
     def change_button_color(widget_label, background_color='transparent'):
         htmlstr = f"""
@@ -73,20 +85,21 @@ with st.container():
 
 
     with col2:
-        def load_lottiefile(filepath: str):
-            with open(filepath, "r") as f:
-                return json.load(f)
-
-        first_anim_lottie = load_lottiefile("images/Animation.json")
-        st_lottie(
-            first_anim_lottie,
-            speed=1,
-            loop=True,
-            quality="low",
-            height=None,
-            width=250,
-            key="first"
-        )
+        if not hide_animations:
+            def load_lottiefile(filepath: str):
+                with open(filepath, "r") as f:
+                    return json.load(f)
+            
+            first_anim_lottie = load_lottiefile("images/Animation.json")
+            st_lottie(
+                first_anim_lottie,
+                speed=1,
+                loop=True,
+                quality="low",
+                height=None,
+                width=250,
+                key="first"
+            )
 
 st.write("---")
 st.subheader('🚀 Features')
@@ -106,22 +119,44 @@ for i, feature in enumerate(FEATURES):
         )
 
 st.write("---")
-col1, col2 = st.columns(2)
 
+if st.session_state["viewport_width"] > 480:
+    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    email_anim_lottie = load_lottiefile("images/email.json")
-    st_lottie(
-        email_anim_lottie,
-        speed=1,
-        loop=True,
-        quality="low",
-        height=None,
-        width=470,
-        key="two"
-    )
+    with col1:
+        email_anim_lottie = load_lottiefile("images/email.json")
+        st_lottie(
+            email_anim_lottie,
+            speed=1,
+            loop=True,
+            quality="low",
+            height=None,
+            width=470 if st.session_state["viewport_width"] > 1024 else 350,
+            key="email_anim"
+        )
 
-with col2:
+    with col2:
+        st.subheader("📨 Contact Me")
+        email = "e5137e4a06ff277dd5bf7c7fa0c088ed"
+        st_tw(
+            text=f"""
+            <div class="bg-white p-6 shadow-lg rounded-lg">
+                <form action="https://formsubmit.co/{email}" method="POST">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input class="w-full p-2 border rounded mb-2" type="text" name="name" placeholder="Your name" required>
+                    <input class="w-full p-2 border rounded mb-2" type="email" name="email" placeholder="Your email" required>
+                    <textarea class="w-full p-2 border rounded mb-2" name="message" placeholder="Your message here" required></textarea>
+                    <button id="submit-btn" 
+                    class="w-auto bg-[#0cc789] text-black text-sm rounded-md px-3 py-1.5 transition duration-300 hover:bg-[#D1D5DB]">
+                    Submit
+                </button>
+                </form>
+            </div>
+            """,
+            height=250
+        )
+else:
     st.subheader("📨 Contact Me")
     email = "e5137e4a06ff277dd5bf7c7fa0c088ed"
     st_tw(
@@ -132,7 +167,10 @@ with col2:
                 <input class="w-full p-2 border rounded mb-2" type="text" name="name" placeholder="Your name" required>
                 <input class="w-full p-2 border rounded mb-2" type="email" name="email" placeholder="Your email" required>
                 <textarea class="w-full p-2 border rounded mb-2" name="message" placeholder="Your message here" required></textarea>
-                <button style="background-color: #0cc789; color: black; border-radius: 6px; padding: 7px 13px; border: none; button:hover background-color: #a0d1c1 !important;">Submit</button>
+                <button id="submit-btn" 
+                    class="w-auto bg-[#0cc789] text-black text-sm rounded-md px-3 py-1.5 transition duration-300 hover:bg-[#D1D5DB]">
+                    Submit
+                </button>
             </form>
         </div>
         """,

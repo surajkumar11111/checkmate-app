@@ -30,7 +30,7 @@ st.markdown(
         .stFileUploader label div { display: none !important; }
         .stButton > button {
             background-color: #0cc789 !important;
-            color: white !important;
+            color: black !important;
             border-radius: 7px !important;
             border: none !important;
             font-size: 16px !important;
@@ -50,6 +50,19 @@ if "uploaded_file" not in st.session_state:
     st.session_state.uploaded_file = None
 if "cheque_details" not in st.session_state:
     st.session_state.cheque_details = None
+
+import subprocess
+def check_poppler_path():
+    result = subprocess.run(["which", "pdftoppm"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    poppler_path = result.stdout.strip()
+    if poppler_path:
+        print(f"Poppler is installed at: {poppler_path}")
+    else:
+        print("Poppler is NOT found in PATH.")
+    return poppler_path
+
+POPPLER_PATH = check_poppler_path()
+
 
 def process_uploaded_file(uploaded_file):
     """Process uploaded cheque image or multi-page PDF."""

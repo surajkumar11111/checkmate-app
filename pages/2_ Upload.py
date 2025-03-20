@@ -5,6 +5,7 @@ from pdf2image import convert_from_bytes
 import io
 from apiconfig import extract_cheque_details  
 from dbconnection import insert_cheque_details, init_db_connection
+import os
 
 # load environment variables
 load_dotenv()
@@ -63,6 +64,10 @@ def check_poppler_path():
 
 POPPLER_PATH = check_poppler_path()
 
+if os.name == "nt":  # Windows system
+    poppler_path = r"C:\poppler-24.08.0\Library\bin"
+else:  
+    poppler_path = "/usr/bin"
 
 def process_uploaded_file(uploaded_file):
     """Process uploaded cheque image or multi-page PDF."""
@@ -76,7 +81,7 @@ def process_uploaded_file(uploaded_file):
 
         elif uploaded_file.type == "application/pdf":
             # convert PDF pages to images
-            images = convert_from_bytes(uploaded_file.getvalue(), fmt="jpeg")
+            images = convert_from_bytes(uploaded_file.getvalue(), fmt="jpeg", poppler_path=poppler_path)
             if not images:
                 raise ValueError("Failed to convert PDF to images.")
 

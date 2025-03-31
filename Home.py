@@ -56,16 +56,16 @@ with st.container():
         st.subheader("Automated Bank Check Processor")
         st.write(info['About'])
 
-        from streamlit_extras.switch_page_button import switch_page
+        #from streamlit_extras.switch_page_button import switch_page
         col_1, col_2, temp = st.columns([0.35, 0.2, 0.45])
         with col_1:
             btn1 = st.button("Get Started")
             if btn1:
-                switch_page("Upload")
+                st.switch_page("pages/2_ Upload.py")
         with col_2:
             btn2 = st.button("Dashboard")
             if btn2:
-                switch_page("Dashboard")
+                st.switch_page("pages/3_ Dashboard.py")
 
 
     def change_button_color(widget_label, background_color='transparent'):

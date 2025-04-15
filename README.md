@@ -28,8 +28,8 @@ CheckMate - Automated Bank Check Processor
     - FPDF, Pandas, Docx for exporting data    
 
 ## 🔗 Live Demo  
-    Check out the deployed application here:  
-    [🚀 CheckMate Live on Streamlit](https://checkmate-python-app.streamlit.app)
+Check out the deployed application here:  
+[🚀 CheckMate Live on Streamlit](https://checkmate-python-app.streamlit.app)
 
 
 ## How It Works
